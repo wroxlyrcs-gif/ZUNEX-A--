@@ -1,1 +1,27 @@
-{"name":"Zunex AI","short_name":"Zunex","start_url":"./index.html","scope":"./","display":"standalone","background_color":"#6c4cf5","theme_color":"#6c4cf5","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]}
+
+{
+  "id": "./",
+  "name": "Zunex AI",
+  "short_name": "Zunex",
+  "description": "Zunex AI - Multilingual Offline Smart Assistant.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#6c4cf5",
+  "theme_color": "#6c4cf5",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
