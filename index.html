@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zunex AI</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<meta name="theme-color" content="#6c4cf5">
+<meta name="description" content="Zunex AI: tarayıcıda yerel çalışan, API anahtarı gerektirmeyen çok dilli asistan.">
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--text:#1b1d2a;--muted:#6b7089;--accent:#6c4cf5;--accent2:#3b82f6;--user:#6c4cf5;--userText:#fff;--bot:#fff;--border:#e3e5ef;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1119;--card:#181b27;--text:#eceefa;--muted:#8d92ad;--bot:#1d2130;--border:#2a2f44;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1119;--card:#181b27;--text:#eceefa;--muted:#8d92ad;--bot:#1d2130;--border:#2a2f44;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border)}
+.logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:grid;place-items:center;font-weight:800}
+header h1{font-size:17px;margin:0;line-height:1.1}
+header small{color:var(--muted);font-size:12px}
+header .sp{flex:1}
+.ghost{background:none;border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:7px 11px;font-size:13px;cursor:pointer}
+#msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex}
+.row.u{justify-content:flex-end}
+.b{max-width:min(720px,86%);padding:10px 14px;border-radius:16px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;font-size:15px}
+.u .b{background:var(--user);color:var(--userText);border-bottom-right-radius:5px}
+.a .b{background:var(--bot);border:1px solid var(--border);border-bottom-left-radius:5px}
+.b img{max-width:100%;max-height:240px;border-radius:10px;display:block;margin-bottom:6px}
+.file{display:inline-block;font-size:12px;padding:3px 8px;border-radius:8px;background:rgba(127,127,127,.18);margin-bottom:6px}
+.empty{margin:auto;text-align:center;color:var(--muted);max-width:340px}
+.empty .logo{margin:0 auto 12px;width:56px;height:56px;font-size:26px;border-radius:17px}
+.empty h2{color:var(--text);margin:0 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.chips button{background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:999px;cursor:pointer;font-size:13px}
+footer{padding:10px 12px;background:var(--card);border-top:1px solid var(--border)}
+#att{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+#att:empty{display:none}
+.att{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:4px 8px;font-size:12px}
+.att img{width:28px;height:28px;object-fit:cover;border-radius:6px}
+.att button{border:0;background:none;color:var(--muted);cursor:pointer;font-size:15px}
+.bar{display:flex;gap:8px;align-items:flex-end}
+textarea{flex:1;resize:none;max-height:140px;min-height:42px;padding:10px 12px;border-radius:14px;border:1px solid var(--border);background:var(--bg);color:var(--text);font:inherit;font-size:15px;outline:none}
+textarea:focus{border-color:var(--accent)}
+.ic{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;font-size:18px;flex:none}
+#send{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:0;font-size:17px}
+#send:disabled{opacity:.5;cursor:default}
+.note{color:var(--muted);font-size:12px;text-align:center;margin-top:6px}
+.dots span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:var(--muted);animation:d 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes d{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+.app{display:flex;flex:1;min-height:0;position:relative}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
+aside{width:270px;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;flex:none}
+.sh{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;font-weight:700}
+#list{flex:1;overflow-y:auto;padding:0 8px 8px}
+.ci{display:flex;align-items:center;gap:6px;padding:9px 10px;border-radius:10px;cursor:pointer;font-size:14px}
+.ci.on{background:var(--bg);font-weight:600}
+.ci span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 4px}
+.none{color:var(--muted);font-size:13px;padding:10px}
+#menu{display:none;width:38px;height:38px;font-size:18px}
+.scrim{display:none}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:30;padding:16px}
+.modal[hidden]{display:none}
+.panel{background:var(--card);color:var(--text);border-radius:16px;padding:18px;width:min(420px,100%);max-height:90%;overflow:auto;border:1px solid var(--border)}
+.panel h3{margin:0 0 4px}
+.panel label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+.panel select,.panel input{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font:inherit}
+.btns{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap}
+.pri{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:0}
+.danger{color:#d33;border-color:#d33}
+@media(max-width:760px){
+ aside{position:fixed;left:0;top:0;bottom:0;z-index:20;transform:translateX(-100%);transition:transform .2s;padding-top:env(safe-area-inset-top,0px)}
+ aside.open{transform:none;box-shadow:2px 0 12px rgba(0,0,0,.25)}
+ .scrim.on{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:15}
+ #menu{display:inline-block}.b{max-width:92%}#newc{display:none}header small{display:none}
+ #msgs{padding:12px}textarea{font-size:16px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside id="side">
+    <div class="sh"><span data-i="hist"></span><button class="ghost" id="newc2" data-i="newc"></button></div>
+    <div id="list"></div>
+  </aside>
+  <div class="main">
+    <header>
+      <button class="ghost" id="menu" aria-label="Menu">☰</button>
+      <div class="logo">Z</div>
+      <div><h1>Zunex AI</h1><small data-i="sub"></small></div>
+      <div class="sp"></div>
+      <button class="ghost" id="newc" data-i="newc"></button>
+      <button class="ghost" id="cfg" aria-label="Settings">⚙</button>
+    </header>
+    <div id="msgs"></div>
+    <footer>
+      <div id="att"></div>
+      <div class="bar">
+        <button class="ic" id="attach" aria-label="Attach">📎</button>
+        <textarea id="inp" rows="1"></textarea>
+        <button class="ic" id="send" aria-label="Send">➤</button>
+      </div>
+      <input type="file" id="file" multiple hidden accept="image/*,.txt,.md,.csv,.json,.js,.py,.html,.css,.log,.xml,.yaml,.yml">
+      <div class="note" id="note"></div>
+    </footer>
+  </div>
+</div>
+<div class="scrim" id="scrim"></div>
+<div class="modal" id="modal" hidden>
+  <div class="panel">
+    <h3 data-i="set"></h3>
+    <label data-i="lang"></label><select id="sLang"></select>
+    <label data-i="theme"></label><select id="sTheme"></select>
+    <label data-i="name"></label><input id="sName" maxlength="40" autocomplete="off">
+    <div class="btns">
+      <button class="ghost danger" id="sDel" data-i="clearAll"></button>
+      <button class="ghost" id="sClose" data-i="close"></button>
+      <button class="ghost pri" id="sSave" data-i="save"></button>
+    </div>
+  </div>
+</div>
+<script src="lang.js"></script>
+<script src="knowledge.js"></script>
+<script src="knowledge-ml.js"></script>
+<script src="assistant.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
